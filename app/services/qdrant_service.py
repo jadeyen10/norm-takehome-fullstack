@@ -67,7 +67,10 @@ class QdrantService:
         qdrant_port = int(os.environ.get("QDRANT_PORT", "6333"))
         ollama_base = os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434")
 
-        client = qdrant_client.QdrantClient(host=qdrant_host, port=qdrant_port)
+        # timeout: default 5s is too short for cold Qdrant; use 30s so startup doesn't fail immediately
+        client = qdrant_client.QdrantClient(
+            host=qdrant_host, port=qdrant_port, timeout=30.0
+        )
         vstore = QdrantVectorStore(client=client, collection_name="documents")
 
         Settings.llm = Ollama(

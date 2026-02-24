@@ -45,7 +45,7 @@ def test_query_get_returns_output(client: TestClient, mock_output: Output):
 def test_query_returns_output_schema(client: TestClient, mock_output: Output):
     with patch("app.main.qdrant_service") as mock_svc:
         mock_svc.query.return_value = mock_output
-        r = client.get("/query", params={"q": "what if I steal?"})
+        r = client.post("/query", json={"query": "what if I steal?"})
     assert r.status_code == 200
     data = r.json()
     assert data["query"] == "what if I steal?"
