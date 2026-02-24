@@ -10,8 +10,8 @@ SECTION_RE = re.compile(r"^(\d+(?:\.\d+)*)\.\s*(.*)")
 
 class DocumentService:
 
-    def __init__(self, file_path: str):
-        self.file_path = file_path
+    def __init__(self, file_path: str | Path):
+        self.file_path = Path(file_path) if isinstance(file_path, str) else file_path
 
     def create_documents(self) -> list[Document]:
         text = self._read_pdf()
@@ -46,7 +46,7 @@ class DocumentService:
                         "parent_id": parent,
                         "level": level,
                         "title": current_title,
-                        "source": Path(self.file_path).name,
+                        "source": self.file_path.name,
                         "citations": citations,
                     },
                 )
