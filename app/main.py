@@ -23,7 +23,6 @@ app = FastAPI(title="Westeros Laws API", lifespan=lifespan)
 
 @app.get("/query", response_model=Output)
 def query(q: str = Query(..., description="Natural language question about the laws")):
-    """Query the laws with natural language. Returns answer and citations."""
     if qdrant_service is None:
         raise RuntimeError("Service not initialized")
     return qdrant_service.query(q)

@@ -1,9 +1,42 @@
-This repository contains a client and server codebase. 
+# Norm AI Take Home
+Backend: FastAPI + DocumentService + QdrantService.  
+Frontend: Next.js client that queries the API and shows the answer with citations.
 
-## Server Repository:
+## Prerequisites
 
-This codebase contains a list of laws (`docs/laws.pdf`) taken from the fictional series “Game of Thrones” (randomly pulled from a wiki fandom site... unfortunately knowledge of the series does not provide an edge on this assignment). Your task is to implement a new service (described in take home exercise document) and provide access to that service via a FastAPI endpoint running in a docker container. Please replace this readme with the steps required to run your app.
+- Python 3.11+
+- Node 18+ (for frontend)
+- **`docs/laws.pdf`** – Place the provided laws PDF in the `docs/` folder. If missing, the app still starts but the index is empty and answers will be generic.
 
-## Client Repository 
+## Backend
 
-In the `frontend` folder you'll find a light NextJS app with it's own README including instructions to run. Your task here is to build a minimal client experience that utilizes the service build in part 1.
+### Setup and run locally
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt -r requirements-local.txt
+uvicorn app.main:app --reload --port 8000
+```
+
+Install [Ollama](https://ollama.ai) and run `ollama run llama3.2`
+
+- API: http://localhost:8000  
+
+### Using the API
+
+- **GET** `/query?q=your+question` – natural language question about the laws.
+- **POST** `/query` with body `{"query": "your question"}` – same as GET.
+- Response is JSON: `{ "query": "...", "response": "...", "citations": [{ "source": "...", "text": "..." }] }`.
+
+### Tests
+
+```bash
+pip install -r requirements.txt
+python -m pytest tests/ -v
+```
+
+## Design notes
+
+- **DocumentService**: Reads `docs/laws.pdf` with fitz, splits text by headings, and returns LlamaIndex `Document` objects.
+- **QdrantService**: In-memory Qdrant, LlamaIndex `Settings` for LLM/embeddings, `CitationQueryEngine` with `similarity_top_k=self.k` for retrieval and cited answers. The service uses Ollama embeddings and for the LLM due to its free tier.
