@@ -10,3 +10,5 @@ llama-index-vector-stores-qdrant
 llama-index-llms-ollama
 llama-index-embeddings-ollama
 uvicorn[standard]
+
+fastapi
