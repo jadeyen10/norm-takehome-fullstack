@@ -32,4 +32,3 @@ def test_extracts_hierarchy_from_laws_pdf():
     assert "trial of seven" in sub_423.text.lower()
 
     assert len(sub_61.metadata["citations"]) > 0
-    print(docs[:5])
