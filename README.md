@@ -29,6 +29,14 @@ Install [Ollama](https://ollama.ai) and run `ollama run llama3.2`
 - **POST** `/query` with body `{"query": "your question"}` – same as GET.
 - Response is JSON: `{ "query": "...", "response": "...", "citations": [{ "source": "...", "text": "..." }] }`.
 
+### Frontend
+```bash
+cd frontend
+npm install
+npm run dev
+```
+Open http://localhost:3000/query?
+
 ### Tests
 
 ```bash
@@ -40,3 +48,4 @@ python -m pytest tests/ -v
 
 - **DocumentService**: Reads `docs/laws.pdf` with fitz, splits text by headings, and returns LlamaIndex `Document` objects.
 - **QdrantService**: In-memory Qdrant, LlamaIndex `Settings` for LLM/embeddings, `CitationQueryEngine` with `similarity_top_k=self.k` for retrieval and cited answers. The service uses Ollama embeddings and for the LLM due to its free tier.
+- **Frontend** Single lightweight input page with submission and display for query, response, citationns.
